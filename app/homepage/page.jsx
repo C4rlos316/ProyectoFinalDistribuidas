@@ -9,16 +9,6 @@ import { navItems, platforms } from '../constants/appConstants';
 import useDialog from '../hooks/useDialog';
 import GameModal from '../components/GameModal';
 
-const fadeInUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
 
 const PaginaPrincipal = () => {
   const [selectedPlatform, setSelectedPlatform] = useState('all');
@@ -71,7 +61,6 @@ const PaginaPrincipal = () => {
               item
               xs="auto"
               key={game.id}
-              sx={{ animation: `${fadeInUp} 0.5s ease-in-out` }}
             >
               <GameCard
                 game={game}
