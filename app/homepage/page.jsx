@@ -1,14 +1,13 @@
+
 'use client';
 import React, { useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
-import { keyframes } from '@mui/system';
+import { Box, Grid, Typography, Fade } from '@mui/material';
 import GameCard from '../components/GameCard';
 import NavigationToolbar from '../components/NavigationToolbar';
 import PlatformFilter from '../components/PlatformFilter';
 import { navItems, platforms } from '../constants/appConstants';
 import useDialog from '../hooks/useDialog';
 import GameModal from '../components/GameModal';
-
 
 const PaginaPrincipal = () => {
   const [selectedPlatform, setSelectedPlatform] = useState('all');
@@ -34,33 +33,43 @@ const PaginaPrincipal = () => {
   return (
     <Box
       sx={{
-        flexGrow: 1,
         minHeight: '100vh',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      
+        background: 'linear-gradient(to bottom, #141E30, #243B55)',
+        position: 'relative',
       }}
     >
       <NavigationToolbar navItems={navItems} />
 
-      <Box sx={{ p: 3, bgcolor: 'rgba(0,0,0,0.7)', borderRadius: 2 }}>
-        <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>
-          Featured
-        </Typography>
+      <Box sx={{ maxWidth: 1200, mx: 'auto', p: 3 }}>
+        <Fade in timeout={800}>
+          <Typography
+            variant="h4"
+            sx={{
+              color: '#1AE5E5',
+              fontWeight: 'bold',
+              mb: 3,
+              textShadow: '0 0 10px rgba(26, 229, 229, 0.5)',
+            }}
+          >
+            Juegos Destacados
+          </Typography>
+        </Fade>
 
-        <PlatformFilter 
+        <PlatformFilter
           platforms={platforms}
           selectedPlatform={selectedPlatform}
           onSelect={setSelectedPlatform}
         />
 
-        <Grid container spacing={2} sx={{ width: '100%', mx: 'auto', mb: 0 }}>
+        <Grid container spacing={2} sx={{ width: '100%', mx: 'auto', mt: 2 }}>
           {filteredGames.map((game) => (
             <Grid
               item
-              xs="auto"
+              xs={12}
+              sm={6}
+              md={4}
               key={game.id}
+              sx={{ display: 'flex' }}
             >
               <GameCard
                 game={game}
