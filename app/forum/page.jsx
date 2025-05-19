@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Typography,
@@ -8,94 +8,43 @@ import {
   AccordionSummary,
   AccordionDetails,
   Chip,
-  TextField,
-  Button,
   List,
   ListItem,
   ListItemText,
   Fab,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Fade,
-  IconButton,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
 import NavigationToolbar from '../components/NavigationToolbar';
+import NewThreadModal from '../components/NewThreadModal';
 import { navItems } from '../constants/appConstants';
-import { useTheme } from '@mui/material/styles';
-
-const initialThreads = [
-  {
-    id: 1,
-    title: '¿Cuál es el mejor juego de 2025?',
-    description: 'Quiero recomendaciones de juegos nuevos, especialmente RPGs y shooters.',
-    author: 'Spriu',
-    replies: [
-      { user: 'RPGQueen', comment: 'Elden Ring 2' },
-      { user: 'CasualGamer', comment: 'Clash royale es el mejor ' },
-    ],
-    replyCount: 2,
-  },
-  {
-    id: 2,
-    title: 'Problemas con el lag t',
-    description: 'Alguien sabe cómo optimizar la conexión para reducir el ping?',
-    author: 'SpeedRunnerX',
-    replies: [
-      { user: 'PixelMaster', comment: 'Prueba cambiar el DNS a Cloudflare (1.1.1.1).' },
-    ],
-    replyCount: 1,
-  },
-  {
-    id: 3,
-    title: 'Torneo de Smash Bros este fin de semana',
-    description: '¿Quién juega ? Es online y hay premios.',
-    author: 'CasualGamer',
-    replies: [
-      { user: 'RPGQueen', comment: '¿Dónde me registro?' },
-      { user: 'SpeedRunnerX', comment: 'Suena divertido' },
-    ],
-    replyCount: 2,
-  },
-];
+import useForum from '../hooks/useForum';
+import useDialog from '../hooks/useDialog';
 
 const ForumsPage = () => {
-  const [threads, setThreads] = useState(initialThreads);
-  const [newThreadTitle, setNewThreadTitle] = useState('');
-  const [newThreadDescription, setNewThreadDescription] = useState('');
-  const [expanded, setExpanded] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const {
+    threads,
+    setThreads,
+    newThreadTitle,
+    setNewThreadTitle,
+    newThreadDescription,
+    setNewThreadDescription,
+    expanded,
+    handleChange,
+    handleCreateThread,
+  } = useForum();
+  const { open, handleOpen, handleClose } = useDialog();
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleModalClose = () => {
     setNewThreadTitle('');
     setNewThreadDescription('');
+    handleClose();
   };
 
-  const handleCreateThread = () => {
-    if (newThreadTitle && newThreadDescription) {
-      const newThread = {
-        id: threads.length + 1,
-        title: newThreadTitle,
-        description: newThreadDescription,
-        author: 'UsuarioActual',
-        replies: [],
-        replyCount: 0,
-      };
-      setThreads([newThread, ...threads]);
-      handleCloseModal();
+  const handleModalSubmit = () => {
+    if (handleCreateThread()) {
+      handleClose();
     }
   };
 
@@ -184,7 +133,6 @@ const ForumsPage = () => {
                   </Box>
                 </AccordionSummary>
                 <AccordionDetails sx={{ bgcolor: 'rgba(0,0,0,0.5)', p: 2 }}>
-                 
                   <Typography variant="h6" sx={{ color: '#fff', mb: 1 }}>
                     Respuestas
                   </Typography>
@@ -232,7 +180,7 @@ const ForumsPage = () => {
         {/* Floating Action Button */}
         <Fab
           color="primary"
-          onClick={handleOpenModal}
+          onClick={handleOpen}
           sx={{
             position: 'fixed',
             bottom: 20,
@@ -249,91 +197,15 @@ const ForumsPage = () => {
         </Fab>
 
         {/* Modal para crear nuevo hilo */}
-        <Dialog
-          open={openModal}
-          onClose={handleCloseModal}
-          maxWidth="sm"
-          fullWidth
-          sx={{
-            '& .MuiDialog-paper': {
-              background: 'linear-gradient(to right, #1e1e1e, #2a2a2a)',
-              color: '#fff',
-              borderRadius: 2,
-
-          //    boxShadow: '0 0 20px rgba(26, 229, 229, 0.5)',
-              backdropFilter: 'blur(10px)',
-            },
-          }}
-        >
-          <DialogTitle
-            sx={{
-              fontWeight: 'bold',
-              color: '#1AE5E5',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            Nueva Pregunta
-            <IconButton onClick={handleCloseModal} sx={{ color: '#fff' }}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent>
-            <TextField
-              label="Título"
-              variant="filled"
-              fullWidth
-              value={newThreadTitle}
-              onChange={(e) => setNewThreadTitle(e.target.value)}
-              sx={{
-                mb: 2,
-                backgroundColor: '#fff',
-                borderRadius: 1,
-                '& .MuiInputLabel-root': { color: '#000000' },
-                '& .MuiInputBase-input': { color: '#000' },
-              }}
-            />
-            <TextField
-              label="Descripción"
-              variant="filled"
-              fullWidth
-              multiline
-              rows={4}
-              value={newThreadDescription}
-              onChange={(e) => setNewThreadDescription(e.target.value)}
-              sx={{
-                mb: 2,
-                backgroundColor: '#fff',
-                borderRadius: 1,
-                '& .MuiInputLabel-root': { color: '#000000' },
-                '& .MuiInputBase-input': { color: '#000' },
-              }}
-            />
-          </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button
-              onClick={handleCloseModal}
-              variant="outlined"
-              sx={{ color: '#1AE5E5', borderColor: '#1AE5E5' }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleCreateThread}
-              disabled={!newThreadTitle || !newThreadDescription}
-              sx={{
-                background: '#1AE5E5',
-                color: '#000',
-                fontWeight: 'bold',
-             
-              }}
-            >
-              Preguntar
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <NewThreadModal
+          open={open}
+          onClose={handleModalClose}
+          newThreadTitle={newThreadTitle}
+          setNewThreadTitle={setNewThreadTitle}
+          newThreadDescription={newThreadDescription}
+          setNewThreadDescription={setNewThreadDescription}
+          onSubmit={handleModalSubmit}
+        />
       </Box>
     </Box>
   );

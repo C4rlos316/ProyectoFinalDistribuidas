@@ -1,6 +1,5 @@
-
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Typography,
@@ -14,79 +13,11 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NavigationToolbar from '../components/NavigationToolbar';
-import { navItems } from '../constants/appConstants';
-import { useTheme } from '@mui/material/styles';
-
-const events = [
-  {
-    id: 1,
-    title: 'Mesa de dialogo FI ',
-    type: 'tournament',
-    date: '2025-06-01',
-    status: 'upcoming',
-    image: '/imgJuego.jpg',
-    banner: '/imgRegistro.jpg',
-    description:
-      '¡Únete al torneo anual de Valorant! Inscripciones abiertas hasta el 25 de mayo.',
-    location: 'Online',
-    organizer: 'Spriu',
-  },
-  {
-    id: 2,
-    title: 'Lanzamiento de Cyberpunk 2',
-    type: 'launch',
-    date: '2025-07-15',
-    status: 'upcoming',
-    image: '/event2.jpg',
-    banner: '/banner2.jpg',
-    description:
-      'Celebra el lanzamiento de Cyberpunk 2 con una transmisión en vivo',
-    location: 'Twitch',
-    organizer: 'Empresa',
-  },
-  {
-    id: 3,
-    title: 'GTA VI',
-    type: 'convention',
-    date: '2025-08-20',
-    status: 'upcoming',
-    image: '/event3.jpg',
-    banner: '/banner3.jpg',
-    description:
-      'Lanzamiento de GTA VI con una gran convención en San Diego. ¡No te lo pierdas!',
-    location: 'San Diego, CA',
-    organizer: 'Rockstar Games',
-  },
-  {
-    id: 4,
-    title: 'Speedrun Marathon',
-    type: 'tournament',
-    date: '2025-05-10',
-    status: 'finished',
-    image: '/event4.jpg',
-    banner: '/banner4.jpg',
-    description:
-      'Revive los mejores momentos del maratón de speedrunning',
-    location: 'YouTube',
-    organizer: 'SpeedRun Community',
-  },
-];
-
-const eventTypes = [
-  { value: 'all', label: 'Todos' },
-  { value: 'tournament', label: 'Torneos' },
-  { value: 'launch', label: 'Lanzamientos' },
-  { value: 'convention', label: 'Convenciones' },
-];
+import { navItems, events, eventTypes } from '../constants/appConstants';
+import useEvents from '../hooks/useEvents';
 
 const EventsPage = () => {
-  const [selectedType, setSelectedType] = useState('all');
-  const [expanded, setExpanded] = useState(false);
-  const theme = useTheme();
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const { selectedType, setSelectedType, expanded, handleChange } = useEvents();
 
   const filteredEvents = selectedType === 'all'
     ? events
@@ -142,6 +73,8 @@ const EventsPage = () => {
             </Button>
           ))}
         </Box>
+
+
 
         {/* Lista de Eventos */}
         <Box sx={{ bgcolor: 'rgba(0,0,0,0.7)', borderRadius: 2, p: 2 }}>
@@ -215,7 +148,6 @@ const EventsPage = () => {
                         />
                       </Box>
                       <Typography variant="body2" color="#ddd">
-                        Fecha: {new Date(event.date).toLocaleDateString()}
                       </Typography>
                       <Typography variant="body2" color="#ddd">
                         Tipo: {eventTypes.find((t) => t.value === event.type)?.label}
