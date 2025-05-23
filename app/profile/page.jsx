@@ -76,7 +76,7 @@ const ProfilePage = () => {
                     mb: 1,
                   }}
                 >
-                  Spriu
+                  User
                 </Typography>
                 <Typography variant="body1" color="#ddd" sx={{ mb: 2 }}>
                   Nivel 8 · 1.5k Puntos
@@ -199,8 +199,9 @@ const ProfilePage = () => {
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.1)',
-                border: '1px solid #1AE5E5',
-                borderRadius: 2,
+
+                // border: '1px solid #1AE5E5',
+                // borderRadius: 2,
                 p: 3,
                 transition: 'all 0.3s ease',
                 '&:hover': {
@@ -209,7 +210,7 @@ const ProfilePage = () => {
               }}
             >
               <Typography variant="h6" sx={{ mb: 2, color: '#1AE5E5', fontWeight: 'bold' }}>
-                Redes sociales
+
               </Typography>
               <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', flexWrap: 'wrap' }}>
                 {socialLinks.map((item, idx) => (
