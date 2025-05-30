@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import {
@@ -13,7 +14,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NavigationToolbar from '../components/NavigationToolbar';
-import { navItems, events, eventTypes } from '../constants/appConstants';
+//import { navItems, events, eventTypes } from '../constants/appConstants';
 import useEvents from '../hooks/useEvents';
 
 const EventsPage = () => {
@@ -203,3 +204,4 @@ const EventsPage = () => {
 };
 
 export default EventsPage;
+
